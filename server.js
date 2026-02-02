@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 const multer = require("multer");
 
 const app = express();
@@ -9,10 +10,24 @@ const port = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-const uploadDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+let uploadRoot = __dirname;
+try {
+  const testDir = path.join(uploadRoot, "uploads-test");
+  fs.mkdirSync(testDir, { recursive: true });
+  fs.rmdirSync(testDir, { recursive: true });
+} catch {
+  uploadRoot = os.tmpdir();
 }
+const uploadDir = path.join(uploadRoot, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  try {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  } catch (err) {
+    console.error("Failed to create upload directory:", err);
+  }
+}
+
+app.use("/uploads", express.static(uploadDir));
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -1704,12 +1719,10 @@ app.post("/admin/applicants/:id/status", requireAdmin, (req, res) => {
   res.redirect("/admin/applicants");
 });
 
-if (!process.env.VERCEL) {
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
   app.listen(port, () => {
     console.log(`First Connect portal running on http://localhost:${port}`);
   });
 }
-
-module.exports = (req, res) => {
-  return app(req, res);
-};
