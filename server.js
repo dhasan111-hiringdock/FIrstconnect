@@ -853,13 +853,13 @@ function renderAdminJobsPage(options = {}) {
   <td>${job.company || ""}</td>
   <td>${job.location || ""}</td>
   <td>${job.rate || ""}</td>
-  <td>${
+  <td><a href="/admin/applicants?status=all&jobId=${job.id}">${
     jobApplicationsCount
-      ? `<a href="/admin/applicants?status=all&jobId=${job.id}">${jobApplicationsCount} candidate${
+      ? `${jobApplicationsCount} candidate${
           jobApplicationsCount === 1 ? "" : "s"
-        }</a>`
-      : "0"
-  }</td>
+        }`
+      : "View applicants (0)"
+  }</a></td>
   <td><span class="${statusClass}">${statusLabel}</span></td>
   <td>
     <div class="actions">
@@ -975,6 +975,7 @@ function renderAdminJobsPage(options = {}) {
       <span>• ${activeJobs} active</span>
       <span>• ${archivedJobs} archived</span>
     </div>
+    <a href="/admin/applicants" class="btn-pill btn-outline">View applicants</a>
     <form method="post" action="/admin/logout">
       <button class="btn-pill btn-outline" type="submit">Logout</button>
     </form>
