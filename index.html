@@ -339,6 +339,20 @@
       color: var(--text-muted);
       font-size: 0.86rem;
     }
+    .logos-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.1rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .logo-pill {
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-pill);
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      background-color: #f9fafb;
+    }
     .jobs-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -591,6 +605,33 @@
       margin-bottom: 0.2rem;
       color: var(--accent-strong);
     }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .testimonial-card {
+      background-color: var(--bg-alt);
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      padding: 1rem 1.1rem;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+      font-size: 0.9rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+    .testimonial-quote {
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+    .testimonial-role {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
     @keyframes pulseDot {
       from {
         transform: scale(1);
@@ -834,6 +875,12 @@
           </p>
         </article>
       </div>
+      <div class="logos-row">
+        <div class="logo-pill">Product-first SaaS teams</div>
+        <div class="logo-pill">VC-backed startups</div>
+        <div class="logo-pill">Growth-stage fintech</div>
+        <div class="logo-pill">Remote-first companies</div>
+      </div>
     </section>
     <section class="section" id="why-first-connect">
       <div class="section-header">
@@ -914,6 +961,40 @@
             </div>
             <a href="/jobs" class="btn-job">Share my profile</a>
           </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="stories">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Stories from our network</h2>
+          <p class="section-subtitle">
+            A few snapshots from the candidates and teams who work with First Connect.
+          </p>
+        </div>
+      </div>
+      <div class="testimonials-grid">
+        <article class="testimonial-card">
+          <p class="testimonial-quote">
+            “We briefed First Connect on a critical product leadership role and saw a shortlist of on-brief candidates in days, not weeks.”
+          </p>
+          <div class="testimonial-name">VP Product</div>
+          <div class="testimonial-role">Series B SaaS, Europe</div>
+        </article>
+        <article class="testimonial-card">
+          <p class="testimonial-quote">
+            “As a candidate I always knew where I stood. Every stage was clear, feedback was honest and there were no surprises.”
+          </p>
+          <div class="testimonial-name">Senior Product Manager</div>
+          <div class="testimonial-role">Placed via First Connect</div>
+        </article>
+        <article class="testimonial-card">
+          <p class="testimonial-quote">
+            “We scaled our go-to-market and operations teams with people who understood product-led growth from day one.”
+          </p>
+          <div class="testimonial-name">Founder</div>
+          <div class="testimonial-role">Growth-stage fintech</div>
         </article>
       </div>
     </section>

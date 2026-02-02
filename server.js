@@ -40,9 +40,29 @@ const storage = multer.diskStorage({
   },
 });
 
+const allowedCvExtensions = [".pdf", ".doc", ".docx", ".rtf", ".odt"];
+const allowedCvMimeTypes = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/rtf",
+  "text/rtf",
+  "application/vnd.oasis.opendocument.text",
+];
+
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter(req, file, cb) {
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    const okExt = allowedCvExtensions.includes(ext);
+    const okMime = allowedCvMimeTypes.includes(file.mimetype);
+    if (okExt || okMime) {
+      cb(null, true);
+    } else {
+      cb(new Error("Unsupported CV file type"));
+    }
+  },
 });
 
 let jobs = [
@@ -825,6 +845,60 @@ textarea {
 <main>
 ${content}
 </main>
+<script>
+(function () {
+  if (typeof window === "undefined") return;
+  function buildShareMessage(title, url) {
+    var prefix = title ? title + " \u2013 " : "";
+    return prefix + url;
+  }
+  function initShare() {
+    var href = window.location.href;
+    var title = document.title || "";
+    var copyButtons = document.querySelectorAll("[data-share-copy]");
+    copyButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var shareTitle = btn.getAttribute("data-share-title") || title;
+        var text = buildShareMessage(shareTitle, href);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            btn.textContent = "Link copied";
+            setTimeout(function () {
+              btn.textContent = "Copy link";
+            }, 1500);
+          }).catch(function () {});
+        } else {
+          var textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          try {
+            document.execCommand("copy");
+          } catch (e) {}
+          document.body.removeChild(textarea);
+        }
+      });
+    });
+    var whatsappLinks = document.querySelectorAll("[data-share-whatsapp]");
+    whatsappLinks.forEach(function (link) {
+      var shareTitle = link.getAttribute("data-share-title") || title;
+      var text = buildShareMessage(shareTitle, href);
+      var waUrl = "https://wa.me/?text=" + encodeURIComponent(text);
+      link.setAttribute("href", waUrl);
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+    });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initShare);
+  } else {
+    initShare();
+  }
+})();
+</script>
 </body>
 </html>`;
 }
@@ -1419,6 +1493,11 @@ function renderJobDetailPage(job) {
   </div>
   ${job.rate ? `<p style="margin:0 0 0.6rem 0; font-size:0.9rem;"><strong>Rate / Salary:</strong> ${job.rate}</p>` : ""}
   <p style="margin:0 0 1rem 0; font-size:0.9rem;">${job.description || "The recruiter has not added a detailed description for this role yet."}</p>
+  <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; margin:0.75rem 0 1rem 0; font-size:0.82rem;">
+    <span class="muted">Share this role</span>
+    <button type="button" class="btn-pill btn-outline" data-share-copy data-share-title="${job.title || "Role"}">Copy link</button>
+    <a href="#" class="btn-pill btn-outline" data-share-whatsapp data-share-title="${job.title || "Role"}">Share on WhatsApp</a>
+  </div>
   <h2 style="margin:0 0 0.6rem 0; font-size:1.05rem;">Apply for this role</h2>
   <form method="post" action="/jobs/${job.id}/apply" enctype="multipart/form-data">
     <div class="field-group">
@@ -1445,8 +1524,8 @@ function renderJobDetailPage(job) {
         <input id="cv" name="cv" type="text" placeholder="Link to your CV (Drive, Dropbox, etc.)" required />
       </div>
       <div class="field">
-        <label for="cvFile">Or attach CV as file (PDF, DOC, DOCX)</label>
-        <input id="cvFile" name="cvFile" type="file" accept=".pdf,.doc,.docx" />
+        <label for="cvFile">Or attach CV as file (PDF, DOC, DOCX, RTF, ODT)</label>
+        <input id="cvFile" name="cvFile" type="file" accept=".pdf,.doc,.docx,.rtf,.odt" />
       </div>
     </div>
     <div class="field-group" style="margin-top:0.75rem;">
