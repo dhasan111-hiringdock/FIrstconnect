@@ -1704,10 +1704,12 @@ app.post("/admin/applicants/:id/status", requireAdmin, (req, res) => {
   res.redirect("/admin/applicants");
 });
 
-if (process.env.VERCEL) {
-  module.exports = app;
-} else {
+if (!process.env.VERCEL) {
   app.listen(port, () => {
     console.log(`First Connect portal running on http://localhost:${port}`);
   });
 }
+
+module.exports = (req, res) => {
+  return app(req, res);
+};
