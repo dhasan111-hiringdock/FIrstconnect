@@ -209,16 +209,21 @@ header {
   font-size: 1.05rem;
 }
 .brand-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 10px;
-  background: radial-gradient(circle at 0% 0%, #60a5fa 0, #2563eb 35%, #1d4ed8 100%);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-size: 0.9rem;
-  font-weight: 700;
+  background-color: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+.brand-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .brand span {
   color: #2563eb;
@@ -829,7 +834,9 @@ textarea {
 <header>
   <div class="nav">
     <div class="brand">
-      <div class="brand-icon">F</div>
+      <div class="brand-icon">
+        <img src="/Assets/WhatsApp Image 2026-02-11 at 14.24.04.jpeg" alt="First Connect logo" />
+      </div>
       <div>FIRST<span>CONNECT</span></div>
     </div>
     <nav class="nav-links">
