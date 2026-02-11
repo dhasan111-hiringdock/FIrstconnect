@@ -209,20 +209,21 @@ header {
   font-size: 1.05rem;
 }
 .brand-icon {
-  width: 32px;
   height: 32px;
-  border-radius: 8px;
+  min-width: 32px;
+  border-radius: 6px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #ffffff;
   border: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 1px 3px;
 }
 .brand-icon img {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
+  width: auto;
+  object-fit: contain;
   display: block;
 }
 .brand span {
